@@ -9,15 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Build APK using Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        with:
-          command: buildozer android debug
+    - name: Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          python3-pip \
+          python3-setuptools \
+          python3-wheel \
+          git \
+          zip \
+          unzip \
+          openjdk-17-jdk \
+          libffi-dev \
+          libssl-dev \
+          liblzma-dev \
+          libbz2-dev \
+          zlib1g-dev
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: skillbond-apk
-          path: bin/*.apk
+    - name: Install Python tools
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install buildozer cython
+
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: skillbond-apk
+        path: bin/*.apk
