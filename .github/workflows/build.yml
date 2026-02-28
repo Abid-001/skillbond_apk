@@ -12,6 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Clean build cache
+        run: |
+          rm -rf .buildozer build bin
+
       - name: Install system dependencies
         run: |
           sudo apt update
@@ -33,12 +37,17 @@ jobs:
             autoconf \
             automake \
             libtool \
+            libltdl-dev \
             m4
 
       - name: Install Python tools
         run: |
           python3 -m pip install --upgrade pip
           pip install buildozer cython
+
+      - name: Patch configure.ac for LT_SYS_SYMBOL_USCORE macro (avoids autoconf error)
+        run: |
+          find . -name configure.ac -exec sed -i '/AC_INIT/a m4_pattern_allow([LT_SYS_SYMBOL_USCORE])' {} \; || true
 
       - name: Build APK (accept licenses automatically)
         run: |
