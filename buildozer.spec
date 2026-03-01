@@ -13,7 +13,7 @@ source.include_exts = py,png,jpg,kv,atlas,ttf
 version       = 1.0
 
 # Requirements — Python 3.10.11 | Kivy 2.3.0 | KivyMD 2.0.1 | Pillow latest
-requirements  = python3==3.10.11,
+requirements  = python3,
                 kivy==2.3.0,
                 kivymd==2.0.1,
                 sdl2_ttf==2.0.15,
